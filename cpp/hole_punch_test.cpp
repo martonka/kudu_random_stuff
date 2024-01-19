@@ -72,14 +72,14 @@ int main(int argc, const char *argv[])
     std::cout << "After read:" << std::endl;
     print_size(fname); 
 
-    std::cout << "Allocating file " << int(3.5 * block_size) << std::endl;
-    check_call((fallocate(fd, 0, 0, int(3.5 * block_size))));
+    std::cout << "Allocating file " << int(4.5 * block_size) << std::endl;
+    check_call((fallocate(fd, 0, 0, int(4.5 * block_size))));
     chek_file(fd, fname);    
 
 
-    std::string s(int(3.25*block_size), 'a');
+    std::string s(int(4.25*block_size), 'a');
     
-    std   ::cout << "Write data " << int(3.25*block_size) << std::endl;
+    std   ::cout << "Write data " << int(4.25*block_size) << std::endl;
     lseek(fd, 0, SEEK_SET);
     write(fd, s.data(), s.size());
     chek_file(fd, fname);    
@@ -88,7 +88,14 @@ int main(int argc, const char *argv[])
     memset(&cmd, 0, sizeof(cmd));
     cmd.l_start = int(0.5 * block_size);
     cmd.l_len = 2 * block_size;
-    std ::cout <<  "Punch hole from: " << cmd.l_start << " length: " << cmd.l_len  << std::endl;
+    std ::cout <<  "Punch hole from: " << cmd.l_start << " to " << (cmd.l_start + cmd.l_len) << " (len: " << cmd.l_len << ")"  << std::endl;
+    check_call(ioctl(fd, XFS_IOC_UNRESVSP64, &cmd));
+    chek_file(fd, fname);    
+
+    memset(&cmd, 0, sizeof(cmd));
+    cmd.l_start = int(2.25 * block_size);
+    cmd.l_len = 1 * block_size;
+    std ::cout <<  "Punch hole from: " << cmd.l_start << " to " << (cmd.l_start + cmd.l_len) << " (len: " << cmd.l_len << ")"  << std::endl;
     check_call(ioctl(fd, XFS_IOC_UNRESVSP64, &cmd));
     chek_file(fd, fname);    
 
