@@ -13,6 +13,7 @@
 #include <iostream>
 
 constexpr int block_size = 4096;
+//constexpr int block_size = 65536;
 
 #define pvar(x) do { std::cout << #x << " =  " << x << std::endl;} while(0)
 #define check_call(x)                                                                                         \
