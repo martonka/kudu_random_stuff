@@ -20,7 +20,7 @@ struct MyAppendOnlyContainer {
         n->value_ = x;
         last->store(n, memory_order::memory_order_release);
         last = &n->next;
-        // std::atomic_signal_fence(std::memory_order_release); <-- this is required
+        // std::atomic_thread_fence(std::memory_order_release); <-- this is required
         num_elements.fetch_add(1, memory_order::memory_order_relaxed);
     }
 
